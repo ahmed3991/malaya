@@ -67,7 +67,9 @@ class XLNetConfig(object):
             setattr(self, key, getattr(FLAGS, key))
 
     def init_from_json(self, json_path):
-        with tf.gfile.Open(json_path) as f:
+        #this change is for tensorflow 2 
+        #this change must be affected in all transformers
+        with tf.io.gfile.Open(json_path) as f:
             json_data = json.load(f)
             for key in self.keys:
                 setattr(self, key, json_data[key])
@@ -79,9 +81,9 @@ class XLNetConfig(object):
             json_data[key] = getattr(self, key)
 
         json_dir = os.path.dirname(json_path)
-        if not tf.gfile.Exists(json_dir):
-            tf.gfile.MakeDirs(json_dir)
-        with tf.gfile.Open(json_path, 'w') as f:
+        if not tf.io.gfile.Exists(json_dir):
+            tf.io.gfile.MakeDirs(json_dir)
+        with tf.io.gfile.Open(json_path, 'w') as f:
             json.dump(json_data, f, indent = 4, sort_keys = True)
 
 
